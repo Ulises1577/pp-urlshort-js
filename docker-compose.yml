@@ -1,0 +1,26 @@
+services: 
+  mongodb:
+    image: mongo:latest
+    container_name: acortadordb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    image: node:20
+    container_name: acortador_app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/acortador
+
+
+volumes:
+  mongo_data:
