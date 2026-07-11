@@ -11,3 +11,19 @@ Content-Type: application/json
 
 ### Redireccion
 GET http://127.0.0.1:3000/8fY8Ce
+
+### Probar Middleware - URL invalida 
+POST http://127.0.0.1:3000/acortar
+Content-Type: application/json
+
+{
+    "urlOriginal": "texto-basura"
+}
+
+### Probar Middleware - URL Valida
+POST http://127.0.0.1:3000/acortar
+Content-Type: application/json
+
+{ 
+    "urlOriginal": "https://www.jw.org/es"
+}
