@@ -36,4 +36,18 @@ export class EnlaceService {
 
         return enlace;
     }
+    async obtenerEstadisticas(codigo) {
+        const enlace = await this.modeloEnlace.findOne({ urlCorta: codigo });
+
+        if (!enlace) {
+            return null; //en caso de que no tengamos el enlace, ya luego lo resuelve API
+        }
+        
+        return { //Nos devuelve los datos de la url
+            urlOriginal: enlace.urlOriginal,
+            urlCorta: enlace.urlCorta,
+            clicks: enlace.clicks || 0,
+            fechaCreacion: enlace.fechaCreacion
+        };
+    }
 }

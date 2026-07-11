@@ -31,6 +31,24 @@ router.post('/acortar', acortarRateLimiter, validarUrlEstricta, async (req, res)
     }
 });
 
+router.get('/:codigo/stats', async (req, res) => {
+    try {
+        const { codigo } = req.params;
+
+        const stats = await enlaceService.obtenerEstadisticas(codigo);
+
+        if (!stats) {
+            return res.status(404).json({ error: 'No se encontraron estadisticas para ese codigo.'});
+        }
+        return res.json(stats);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'ERROR AL OBTENER ESTADISTICAS'});
+    }
+    
+});
+
+
 router.get('/:codigo', async (req, res) => {
     try {
         const { codigo } = req.params; 
