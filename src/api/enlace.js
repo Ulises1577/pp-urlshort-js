@@ -29,4 +29,23 @@ router.post('/acortar', async (req, res) => {
     }
 });
 
+router.get('/:codigo', async (req, res) => {
+    try {
+        const { codigo } = req.params; 
+
+        const enlace = await enlaceService.obtenerEnlaceOriginal(codigo);
+        //Aca lo mandamo a buscar usando el service y le mandamos como parametro el codigo que vamos a buscar
+
+        if (!enlace) { //en caso de que no haya enlace (EL NULL) aqui se resuelve 
+            return res.status(404).json({ error: 'El enlace solicitado no existe o expiro'});
+        }
+
+        return res.redirect(302, enlace.urlOriginal); //Aca redireccionamos a la url original usando 302 (movido temporalmente)
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ erro: 'ERROR EN EL SERVIDOR AL REDIRECCIONAR '});
+    }
+});
+
 export default router; //ocupamos el default porque luego ese mismo puede usar cualquier nombre sin {}
