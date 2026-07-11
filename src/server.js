@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json()); //Esta madre es para recibir los archivos en JSON
-
+app.use(express.static('src/public'));
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/acortador';
 
 //Conexion a MongoDb

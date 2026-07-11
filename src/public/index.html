@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acortador de Enlaces Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl max-w-md w-full border border-slate-700">
+        <h1 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Cortito URL
+        </h1>
+        <p class="text-slate-400 text-center text-sm mb-6">Acorta tus enlaces de forma rápida y segura</p>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Ingresa tu URL larga</label>
+                <input type="url" id="urlOriginal" placeholder="https://ejemplo.com/tu-link-largo" 
+                    class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-all">
+            </div>
+            <button onclick="acortarUrl()" 
+                class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 font-bold rounded-xl shadow-lg shadow-cyan-500/20 transition-all transform active:scale-95">
+                Acortar Enlace 
+            </button>
+        </div>
+
+        <div id="resultado" class="mt-6 hidden space-y-3">
+            <div id="boxExito" class="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-xl hidden">
+                <p class="text-xs text-emerald-400 font-semibold uppercase">¡Listo! Tu enlace corto:</p>
+                <a id="linkCorto" href="#" target="_blank" class="text-cyan-400 font-bold break-all hover:underline block mt-1"></a>
+                <p id="txtCodigo" class="text-slate-500 text-xs mt-2"></p>
+            </div>
+            
+            <div id="boxError" class="bg-rose-500/10 border border-rose-500/30 p-4 rounded-xl text-rose-400 text-sm hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        async function acortarUrl() {
+            const inputUrl = document.getElementById('urlOriginal');
+            const boxResultado = document.getElementById('resultado');
+            const boxExito = document.getElementById('boxExito');
+            const boxError = document.getElementById('boxError');
+            const linkCorto = document.getElementById('linkCorto');
+            const txtCodigo = document.getElementById('txtCodigo');
+
+            // Limpiamos la pantalla anterior
+            boxResultado.classList.remove('hidden');
+            boxExito.classList.add('hidden');
+            boxError.classList.add('hidden');
+
+            try {
+                // Le pegamos directo a tu endpoint de Express
+                const response = await fetch('/acortar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ urlOriginal: inputUrl.value })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // Si el middleware de validación o el rate limiter saltan, mostramos el error del backend
+                    boxError.textContent = data.error || 'Ocurrió un error inesperado';
+                    boxError.classList.remove('hidden');
+                } else {
+                    // Si sale 201, pintamos el link acortado en la pantalla
+                    linkCorto.href = data.corto;
+                    linkCorto.textContent = data.corto;
+                    txtCodigo.textContent = `Código identificador: ${data.codigo}`;
+                    boxExito.classList.remove('hidden');
+                    inputUrl.value = ''; // Limpiar el input
+                }
+            } catch (err) {
+                boxError.textContent = 'No se pudo conectar con el servidor Docker.';
+                boxError.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
