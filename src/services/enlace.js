@@ -1,3 +1,5 @@
+//Logica de negocio
+
 export class EnlaceService {
     constructor ({ generarCodigo, modeloEnlace }) {
         this.generarCodigo = generarCodigo
@@ -14,7 +16,7 @@ export class EnlaceService {
 
         const nuevoEnlace = new this.modeloEnlace({
             urlOriginal,
-            codigoCorto
+            urlCorta: codigoCorto
         });
 
         await nuevoEnlace.save();

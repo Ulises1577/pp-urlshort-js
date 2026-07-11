@@ -1,3 +1,5 @@
+//Modelo de informacion a base de datos
+
 import mongoose from "mongoose";
 
 const enlaceSchema = new mongoose.Schema({

@@ -1,7 +1,13 @@
+//Rutas donde se envia y recibe la informacion
+
 import { Router } from 'express';
 import  { enlaceService } from '../dependencies.js';
 
 const router = Router();
+
+router.get('/', (req, res) => {
+    res.json({ mensaje: "Servidor funcionando"});
+});
 
 router.post('/acortar', async (req, res) => {
     try {
@@ -11,15 +17,15 @@ router.post('/acortar', async (req, res) => {
 
         res.status(201).json({
             orignal: enlaceGuardado.urlOriginal,
-            corto: `http://localhost:3000/${enlaceGuardado.codigoCorto}`,
-            codigo: enlaceGuardado.codigoCorto
+            corto: `http://127.0.0.1:3000/${enlaceGuardado.urlCorta}`,
+            codigo: enlaceGuardado.urlCorta
         });
     } catch (error) {
-        if (error.mesagge === 'La URL original es obligatoria') {
+        if (error.message === 'La URL original es obligatoria') {
             return res.status(400).json({ error: error.message });
         }
         console.error(error);
-        res.status(500).json({ error: 'ERROR EN EL SERVIDORE'});
+        res.status(500).json({ error: 'ERROR EN EL SERVIDOR'});
     }
 });
 
