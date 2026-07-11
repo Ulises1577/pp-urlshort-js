@@ -2,11 +2,13 @@
 
 import express from 'express';
 import mongoose from 'mongoose';
+import dotenv  from 'dotenv';
 import rutasEnlace from './api/enlace.js' //posible error en las rutas
 
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.use(express.json()); //Esta madre es para recibir los archivos en JSON
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/acortador';
@@ -21,7 +23,7 @@ mongoose.connect(MONGO_URI)
     });
 
 //Arranque del Servidor
-app.use('/', rutasEnlace); //posible error
+app.use('/', rutasEnlace); 
 
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
