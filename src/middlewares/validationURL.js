@@ -1,11 +1,14 @@
 export const validarUrlEstricta = (req, res, next ) => {
     try {
+        //Guarda la request en urlOriginal para procesarla
         const { urlOriginal } = req.body;
 
+        //revisa nada mas si es que tiene url
         if (!urlOriginal) {
             return next();
         }
         //Parseada es como traducida sintacticamente
+        //Pasa la url y revisamos si tiene la estructura de una URL
         const urlParseada = new URL(urlOriginal);
 
         if (urlParseada.protocol !== 'http:' && urlParseada.protocol !== 'https:') {

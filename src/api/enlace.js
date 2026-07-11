@@ -3,6 +3,7 @@
 import { Router } from 'express';
 import  { enlaceService } from '../dependencies.js';
 import { validarUrlEstricta } from '../middlewares/validationURL.js';
+import { acortarRateLimiter } from '../middlewares/rateLimiter.js';
 
 const router = Router();
 
@@ -10,7 +11,7 @@ router.get('/', (req, res) => {
     res.json({ mensaje: "Servidor funcionando"});
 });
 
-router.post('/acortar', validarUrlEstricta, async (req, res) => {
+router.post('/acortar', acortarRateLimiter, validarUrlEstricta, async (req, res) => {
     try {
         const { urlOriginal } = req.body;
 

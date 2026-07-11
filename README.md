@@ -78,3 +78,17 @@ CREACION DE ENLACE CORTO
                                   │
                                   ▼
                     [ Navegador redirige al destino final ]
+
+
+FUNCIONAMIENTO Y FLUJO DE MIDDLEWARES
+
+[Cliente: test.http] 
+       │
+       ▼
+ 1️⃣  acortarRateLimiter  ──► ¿Hizo más de 10 peticiones? ──► SÍ ──► [429 Too Many Requests]
+       │ (No)
+       ▼
+ 2️⃣  validarUrlEstricta  ──► ¿Es una URL de verdad?   ──► NO ──► [400 Bad Request]
+       │ (Sí)
+       ▼
+ 3️⃣  Servicio / MongoDB  ──► Guarda en base de datos y genera código corto [201 Created]
