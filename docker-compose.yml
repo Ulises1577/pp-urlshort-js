@@ -3,7 +3,7 @@ services:
     image: mongo:latest
     container_name: acortadordb
     ports:
-      - "3000:3000"
+      - "27017:27017"
     env_file:
       - .env
     volumes:
